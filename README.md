@@ -1,11 +1,6 @@
 # Simple LlamaIndex Agent
 
-
-
-
-
 <img src="assets/image.png" alt="Application Page" title="Website Page">
-
 
 A FastAPI-based application that combines a Retrieval-Augmented Generation (RAG) system with an intelligent agent for enhanced information retrieval and query handling.
 
@@ -121,7 +116,3 @@ Key packages:
 - fastapi
 - langchain
 - streamlit
-
-## License
-
-This project is proprietary and confidential.
