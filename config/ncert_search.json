@@ -1,0 +1,17 @@
+{
+  "task_type": "ncert_search",
+  "namespace": "ncert",
+  "index_name": "ncert-index",
+  "agent_llm": "gpt-4",
+  "embedding_model_name": "text-embedding-3-large",
+  "pinecone_host": "https://ncert-index-6redfqu.svc.aped-4627-b74a.pinecone.io",
+  "similarity_top_k": 5,
+  "embedding_dim": 3072,
+  "similarity_cutoff": 0.6,
+  "chunk_size": 1024,
+  "chunk_overlap": 50,
+  "long_answ_top_k": 15,
+  "llm": "gpt-4",
+  "query_classification_model_name": "gpt-4",
+  "exclude_keys_to_allow_all": ["model_name", "version", "file_name"]
+}
