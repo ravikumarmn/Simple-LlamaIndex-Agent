@@ -4,11 +4,7 @@ import shutil
 import streamlit as st
 from langchain.agents import Tool
 from document_manager import document_manager
-from agent import (
-    VectorDBTool,
-    InappropriateContentDetector,
-    get_agent
-)
+from agent import VectorDBTool, InappropriateContentDetector, get_agent
 
 # Get API keys from secrets
 pinecone_api_key = st.secrets["PINECONE_API_KEY"]
@@ -20,9 +16,11 @@ os.environ["PINECONE_API_KEY"] = pinecone_api_key
 os.environ["OPENAI_API_KEY"] = openai_api_key
 os.environ["COHERE_API_KEY"] = cohere_api_key
 
+
 @st.cache_resource
 def get_document_manager():
     return document_manager
+
 
 @st.cache_resource
 def get_agent_instance():
@@ -30,24 +28,25 @@ def get_agent_instance():
     try:
         with open("./config/ncert_search.json") as f:
             config = json.load(f)
-        
+
         tools = [
             Tool(
                 name="VectorDBTool",
                 func=VectorDBTool().run,
-                description="Use this tool to query the VectorDB for complex information."
+                description="Use this tool to query the VectorDB for complex information.",
             ),
             Tool(
                 name="InappropriateContentDetector",
                 func=InappropriateContentDetector().run,
-                description="Detects inappropriate language in user queries and warns the user."
-            )
+                description="Detects inappropriate language in user queries and warns the user.",
+            ),
         ]
-        
+
         return get_agent(tools, config["agent_llm"])
     except Exception as e:
         st.error(f"Failed to initialize agent: {e}")
         return None
+
 
 @st.cache_data
 def process_uploaded_file(file_path):
@@ -59,11 +58,13 @@ def process_uploaded_file(file_path):
     except Exception as e:
         return 0, str(e)
 
+
 # Add project information in sidebar
 with st.sidebar:
     st.title("🤖 RAG Assistant")
-    
-    st.markdown("""
+
+    st.markdown(
+        """
     <style>
     .sidebar-content {
         background-color: #f0f2f6;
@@ -78,40 +79,52 @@ with st.sidebar:
         margin-top: 20px;
     }
     </style>
-    """, unsafe_allow_html=True)
-    
+    """,
+        unsafe_allow_html=True,
+    )
+
     st.markdown('<p class="feature-header">📚 Key Features</p>', unsafe_allow_html=True)
-    st.markdown("""
+    st.markdown(
+        """
     - 📄 Upload documents (PDF, TXT)
     - 🔍 Document indexing
     - 💡 AI-powered Q&A
     - 🎯 Context-aware responses
-    """)
-    
-    st.markdown('<p class="feature-header">🧠 Smart Agent System</p>', unsafe_allow_html=True)
-    st.markdown("""
+    """
+    )
+
+    st.markdown(
+        '<p class="feature-header">🧠 Smart Agent System</p>', unsafe_allow_html=True
+    )
+    st.markdown(
+        """
     - 🤖 Intelligent query processing
     - 🚫 Content safety monitoring
-    """)
+    """
+    )
 
     st.markdown('<p class="feature-header">⚡ Tech Stack</p>', unsafe_allow_html=True)
-    st.markdown("""
+    st.markdown(
+        """
     - 🧠 **OpenAI**: GPT-4 integration
     - 🔍 **Pinecone**: Vector database
     - 📚 **LlamaIndex**: Document processing
     - 🎨 **Streamlit**: User interface
-    """)
+    """
+    )
 
     with st.expander("🛠️ Agent Capabilities"):
-        st.markdown("""
+        st.markdown(
+            """
         Our smart agent system features:
         
         - **Query Analysis**: Smart question processing
         - **Document Retrieval**: Efficient information lookup
         - **Context Integration**: Seamless knowledge combination
         - **Safety Checks**: Content appropriateness verification
-        """)
-    
+        """
+        )
+
     st.divider()
     st.caption(" 2024 RAG Assistant")
     st.divider()
@@ -159,7 +172,7 @@ if uploaded_file is not None:
 # Chat interface
 if st.session_state["file_processed"] and agent:
     st.markdown("---")
-    
+
     if "agent_messages" not in st.session_state:
         st.session_state["agent_messages"] = []
 
@@ -185,6 +198,8 @@ if st.session_state["file_processed"] and agent:
                 st.error(f"Failed to connect to agent: {str(e)}")
 else:
     if not agent:
-        st.error("Agent initialization failed. Please check your configuration and API keys.")
+        st.error(
+            "Agent initialization failed. Please check your configuration and API keys."
+        )
     else:
         st.info("Please upload a document to start asking questions!")
