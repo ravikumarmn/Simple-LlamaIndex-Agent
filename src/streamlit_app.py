@@ -5,6 +5,9 @@ import streamlit as st
 from langchain.agents import Tool
 from document_manager import document_manager
 from agent import VectorDBTool, InappropriateContentDetector, get_agent
+import warnings
+
+warnings.filterwarnings("ignore")
 
 # Get API keys from secrets
 pinecone_api_key = st.secrets["PINECONE_API_KEY"]
